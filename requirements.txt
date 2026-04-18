@@ -1,0 +1,10 @@
+﻿numpy==2.2.6
+pandas==2.3.3
+pi==0.1.2
+pip==26.0.1
+py-dss-interface==2.3.0
+python-dateutil==2.9.0.post0
+pytz==2025.2
+setuptools==63.2.0
+six==1.17.0
+tzdata==2025.3
