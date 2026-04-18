@@ -13,9 +13,9 @@ The framework operates as a closed-loop co-simulation between Python (decision l
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    MONTE CARLO OUTER LOOP                       │
-│                  (run_monte_carlo_pof.py)                        │
+│                  (run_monte_carlo_pof.py)                       │
 │                                                                 │
-│   For each iteration (seed = 1, 2, ..., N):                    │
+│   For each iteration (seed = 1, 2, ..., N):                     │
 │                                                                 │
 │   ┌───────────────────────┐                                     │
 │   │  generate_fleet_db.py │──► Stochastic EV Fleet DataFrame    │
@@ -27,16 +27,16 @@ The framework operates as a closed-loop co-simulation between Python (decision l
 │   │        48-HOUR TIME-SERIES INNER LOOP           │           │
 │   │        (288 steps × 10-min intervals)           │           │
 │   │                                                 │           │
-│   │   ┌──────────────┐    ┌───────────────────┐     │           │
-│   │   │  OpenDSS     │◄──►│  Python Master    │     │           │
-│   │   │  (Power Flow │    │  Controller       │     │           │
-│   │   │   Solver)    │    │                   │     │           │
-│   │   │              │    │  1. Solve PF       │     │           │
-│   │   │  Master_     │    │  2. Extract V, VUF │     │           │
-│   │   │  IEEE34.dss  │    │  3. Call Logic ─────┼──► │           │
-│   │   └──────────────┘    │  4. Override kW    │     │           │
-│   │                       │  5. Advance step   │     │           │
-│   │                       └───────────────────┘     │           │
+│   │   ┌──────────────┐    ┌────────────────────┐    │           │
+│   │   │  OpenDSS     │◄──►│  Python Master     │    │           │
+│   │   │  (Power Flow │    │  Controller        │    │           │
+│   │   │   Solver)    │    │                    │    │           │
+│   │   │              │    │  1. Solve PF       │    │           │
+│   │   │  Master_     │    │  2. Extract V, VUF │    │           │
+│   │   │  IEEE34.dss  │    │  3. Call Logic ────┼──► │           │
+│   │   └──────────────┘    │  4. Override kW    │    │           │
+│   │                       │  5. Advance step   │    │           │
+│   │                       └────────────────────┘    │           │
 │   │                              │                  │           │
 │   │                   ┌──────────┴──────────┐       │           │
 │   │                   │  ev_logic_engine.py │       │           │
@@ -47,12 +47,12 @@ The framework operates as a closed-loop co-simulation between Python (decision l
 │              │                                                  │
 │              ▼                                                  │
 │   Exports: MonteCarlo_Summary_XXXEVs.csv                        │
-│            SimulationData_XXXEVs.npz                             │
+│            SimulationData_XXXEVs.npz                            │
 └─────────────────────────────────────────────────────────────────┘
               │
               ▼
    ┌───────────────────────┐
-   │  Master_plotter.py    │──► IEEE-formatted figures (.png)
+   │  Master_plotter.py    │──► Visual Graphs (.png)
    │  (Results Visualiser) │
    └───────────────────────┘
 ```
@@ -102,7 +102,7 @@ Additionally, `generate_ev_scenarios.py` is a standalone script that produces th
    | `numpy`            | 2.2.6    | Numerical computation and array operations           |
    | `pandas`           | 2.3.3    | EV fleet database management (DataFrames)            |
    | `py-dss-interface` | 2.3.0    | Python–OpenDSS COM interface bridge                  |
-   | `matplotlib`       | *        | Results visualisation (used by Master_plotter.py)    |
+   | `matplotlib`       | 3.10.8   | Results visualisation (used by Master_plotter.py)    |
 
    *Note: `matplotlib` is required for `Master_plotter.py` but is not listed in the base `requirements.txt`. Install it separately if needed:*
    ```
