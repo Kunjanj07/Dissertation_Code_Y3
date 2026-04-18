@@ -65,7 +65,6 @@ Additionally, `generate_ev_scenarios.py` is a standalone script that produces th
 ├── run_monte_carlo_pof.py       # Main simulation orchestrator (Monte Carlo loop)
 ├── generate_fleet_db.py         # Stochastic EV fleet database generator
 ├── ev_logic_engine.py           # MTOUCP decentralised smart charging controller
-├── generate_ev_scenarios.py     # Disorderly baseline scenario generator (standalone)
 ├── Master_plotter.py            # IEEE-formatted results visualisation
 ├── Master_IEEE34.dss            # OpenDSS network model (IEEE 34-Node Test Feeder)
 ├── IEEELineCodes.dss            # Line impedance data (referenced by Master_IEEE34.dss)
