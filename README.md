@@ -4,7 +4,7 @@
 
 This repository contains the software developed for the 3rd Year Individual Project (EEEN30330) at the University of Manchester, Department of Electrical and Electronic Engineering.
 
-The project investigates the impact of uncoordinated electric vehicle (EV) charging on distribution network infrastructure and evaluates a decentralised smart charging algorithm — the **Multi-Group Time-of-Use with Critical Peak (MTOUCP)** controller — as a mitigation strategy. The software implements a Python–OpenDSS co-simulation framework that performs Monte Carlo probabilistic analysis across multiple EV penetration levels, comparing a disorderly (uncontrolled) charging baseline against the MTOUCP orderly charging strategy. Performance is evaluated using four engineering metrics: voltage stability (p.u.), voltage unbalance factor (VUF %), cumulative active power losses (kWh), and mechanical tap operations on voltage regulators.
+The project investigates the impact of uncoordinated electric vehicle (EV) charging on distribution network infrastructure and evaluates a decentralised smart charging algorithm as a mitigation strategy. The software implements a Python–OpenDSS co-simulation framework that performs Monte Carlo probabilistic analysis across multiple EV penetration levels, comparing a disorderly (uncontrolled) charging baseline against the orderly (controlled) charging strategy. Performance is evaluated using four engineering metrics: voltage stability (p.u.), voltage unbalance factor (VUF %), cumulative active power losses (kWh), and mechanical tap operations on voltage regulators.
 
 ## 2. Contextual Overview
 
@@ -57,7 +57,6 @@ The framework operates as a closed-loop co-simulation between Python (decision l
    └───────────────────────┘
 ```
 
-Additionally, `generate_ev_scenarios.py` is a standalone script that produces the disorderly (uncoordinated) baseline scenario files used for initial validation prior to the Monte Carlo framework.
 
 ## 3. Repository Structure
 
@@ -68,6 +67,7 @@ Additionally, `generate_ev_scenarios.py` is a standalone script that produces th
 ├── Master_plotter.py            # IEEE-formatted results visualisation
 ├── Master_IEEE34.dss            # OpenDSS network model (IEEE 34-Node Test Feeder)
 ├── IEEELineCodes.dss            # Line impedance data (referenced by Master_IEEE34.dss)
+├── Typical_Base_144.csv
 ├── requirements.txt             # Python dependency list
 └── README.md                    # This file
 ```
@@ -85,10 +85,6 @@ Additionally, `generate_ev_scenarios.py` is a standalone script that produces th
 ### Setup
 
 1. Clone or download this repository:
-   ```
-   git clone https://github.com/<your-username>/<repo-name>.git
-   cd <repo-name>
-   ```
 
 2. Install the required Python packages:
    ```
@@ -103,10 +99,6 @@ Additionally, `generate_ev_scenarios.py` is a standalone script that produces th
    | `py-dss-interface` | 2.3.0    | Python–OpenDSS COM interface bridge                  |
    | `matplotlib`       | 3.10.8   | Results visualisation (used by Master_plotter.py)    |
 
-   *Note: `matplotlib` is required for `Master_plotter.py` but is not listed in the base `requirements.txt`. Install it separately if needed:*
-   ```
-   pip install matplotlib
-   ```
 
 3. Ensure that `IEEELineCodes.dss` is present in the same directory as `Master_IEEE34.dss`. This file contains the phase impedance matrices for the IEEE 34-bus line segments and is loaded via a `Redirect` command inside the master DSS file.
 
@@ -149,13 +141,6 @@ python Master_plotter.py
 
 This reads the `.npz` files and produces IEEE-formatted publication-quality figures for voltage distributions, temporal loss profiles, spatial tap operations, and temporal tap position traces.
 
-### Standalone: Disorderly Baseline Generator
-
-`generate_ev_scenarios.py` can be run independently to produce the OpenDSS load definitions and load shape matrix for an uncoordinated charging scenario:
-```
-python generate_ev_scenarios.py
-```
-This outputs `EV_Disorderly_Scenario.dss` and `EV_Shapes_Matrix.csv`.
 
 ## 6. Technical Details
 
