@@ -109,8 +109,8 @@ The framework operates as a closed-loop co-simulation between Python (decision l
 The primary entry point is `run_monte_carlo_pof.py`. Before running, configure the simulation parameters at the top of the file:
 
 ```python
-NUM_ITERATIONS = 100   # Number of Monte Carlo iterations per scenario
-NUM_EVS = 300          # EV penetration level (e.g. 150, 200, 250)
+NUM_ITERATIONS = 1000   # Number of Monte Carlo iterations per scenario
+NUM_EVS = 150          # EV penetration level (e.g. 150, 200, 250)
 ```
 
 Then execute:
