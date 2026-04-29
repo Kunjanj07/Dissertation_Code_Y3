@@ -4,7 +4,7 @@
 
 This repository contains the software developed for the 3rd Year Individual Project (EEEN30330) at the University of Manchester, Department of Electrical and Electronic Engineering.
 
-The project investigates the impact of uncoordinated electric vehicle (EV) charging on distribution network infrastructure and evaluates a decentralised smart charging algorithm as a mitigation strategy. The software implements a Python–OpenDSS co-simulation framework that performs Monte Carlo probabilistic analysis across multiple EV penetration levels, comparing a disorderly (uncontrolled) charging baseline against the orderly (controlled) charging strategy. Performance is evaluated using four engineering metrics: voltage stability (p.u.), voltage unbalance factor (VUF %), cumulative active power losses (kWh), and mechanical tap operations on voltage regulators.
+The project investigates the impact of uncoordinated electric vehicle (EV) charging on distribution network infrastructure and evaluates a decentralised smart charging algorithm as a mitigation strategy. The software implements a Python–OpenDSS co-simulation framework that performs Monte Carlo probabilistic analysis across multiple EV penetration levels, comparing a disorderly (uncontrolled) charging baseline against the orderly (controlled) charging strategy. Performance is evaluated using four engineering metrics: voltage stability (p.u.), voltage unbalance factor (VUF %), cumulative active power losses (kWh), mechanical tap operations on voltage regulators, and departure energy defecit. 
 
 ## 2. Contextual Overview
 
