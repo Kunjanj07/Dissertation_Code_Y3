@@ -6,10 +6,10 @@ import math
 # --- EVALUATION CONFIGURATION ---
 # Define the penetration levels to evaluate. Modify these to change the scenario outputs.
 SCENARIOS = [150, 200, 250]
-SCENARIO_LABELS = ['150 EVs (Low Stress)', '200 EVs (High Stress)', '250 EVs (Extreme)']
+SCENARIO_LABELS = ['150 EVs (Low Stress)', '200 EVs (Medium Stress)', '250 EVs (High Stress)']
 
-# --- IEEE GRAPHICS SETTINGS ---
-# Adhering to strict academic formatting guidelines
+# --- GRAPHICS SETTINGS ---
+
 plt.rcParams['font.family'] = 'serif'
 plt.rcParams['font.serif'] = ['Times New Roman', 'DejaVu Serif']
 plt.rcParams['font.size'] = 10
@@ -26,7 +26,7 @@ def load_simulation_data(scenarios):
 
     print("--- INGESTING SIMULATION MATRICES ---")
     for ev in scenarios:
-        filename = f"SimulationData_{ev}EVs.npz"
+        filename = f"SimulationData_{ev}EVs_1000.npz"
         if not os.path.exists(filename):
             raise FileNotFoundError(f"CRITICAL: Missing data file '{filename}'. Execute the engine for {ev} EVs first.")
 
@@ -73,7 +73,7 @@ def plot_grouped_box_whisker(data, scenarios, labels):
     # Enforce Statutory Minimum Threshold
     stat_line = ax.axhline(y=0.95, color='black', linestyle='--', linewidth=1.5, label='Statutory Limit (0.95 p.u.)')
 
-    # Figure Formatting (Title intentionally omitted)
+    # Figure Formatting
     ax.set_ylabel("Absolute Minimum Voltage (p.u.)")
 
     # Centre the categorical labels between the dynamic grouped boxes
@@ -115,7 +115,7 @@ def plot_temporal_losses(data, scenarios, labels):
     print("\nGenerating Figure 5.2: 48-Hour Temporal Loss Profiles...")
 
     num_scenarios = len(scenarios)
-    time_axis = np.linspace(0, 48, 288) #"np.arange(288) * (10/60)"
+    time_axis = np.linspace(0, 48, 288)
 
     fig, axes = plt.subplots(num_scenarios, 1, figsize=(10, 3.5 * num_scenarios), dpi=300, sharex=True)
 
@@ -260,12 +260,71 @@ def plot_temporal_taps(data, scenarios, labels):
     plt.close()
 
 
+def plot_tradeoff_decoupling():
+    """
+    Generates Figure 5.5: Dual-axis plot demonstrating the decoupling of
+    grid stress (Voltage PoF) and consumer outcome (Mean Deficit).
+    Operates independently of the .npz extraction pipeline.
+    """
+    print("\nGenerating Figure 5.5: Decoupling of Grid Stress and Consumer Deficit...")
+
+    # Hardcoded scalar values derived from the 1000-run stochastic extraction
+    categories = np.arange(3)
+    labels = ['150 EVs\n(Low Stress)', '200 EVs\n(Medium Stress)', '250 EVs\n(High Stress)']
+
+    voltage_pof = [0.1, 5.0, 33.6]
+    mean_deficit = [0.402, 0.404, 0.404]
+
+    # Instantiate strictly formatted IEEE landscape figure
+    fig, ax1 = plt.subplots(figsize=(12, 6), dpi=300)
+
+    # --- Primary Axis (Left - Grid Stress) ---
+    color_pof = '#DC143C'  # Crimson
+    line1 = ax1.plot(categories, voltage_pof, color=color_pof, marker='o', linestyle='-',
+                     linewidth=2.5, markersize=10, label='Voltage PoF (Grid Stress)')
+
+    ax1.set_ylabel('Voltage PoF (%)', color=color_pof, fontsize=12, fontweight='bold')
+    ax1.tick_params(axis='y', labelcolor=color_pof, labelsize=11)
+    ax1.set_ylim(0, 40)
+    ax1.grid(axis='y', linestyle=':', color='lightgrey', alpha=0.8)
+
+    # Apply categorical X-axis labels
+    ax1.set_xticks(categories)
+    ax1.set_xticklabels(labels, fontsize=11, fontweight='bold')
+
+    # --- Secondary Axis (Right - Consumer Cost) ---
+    ax2 = ax1.twinx()
+    color_def = '#1E50A0'  # Royal Blue
+    line2 = ax2.plot(categories, mean_deficit, color=color_def, marker='s', linestyle='-',
+                     linewidth=2.5, markersize=10, label='Mean Deficit (Consumer Cost)')
+
+    ax2.set_ylabel('Mean Consumer Deficit (kWh)', color=color_def, fontsize=12, fontweight='bold')
+    ax2.tick_params(axis='y', labelcolor=color_def, labelsize=11)
+    ax2.set_ylim(0, 0.5)
+
+    # --- Legend Aggregation ---
+    lines = line1 + line2
+    labels_leg = [l.get_label() for l in lines]
+    ax1.legend(lines, labels_leg, loc='upper center', framealpha=0.9, edgecolor='black', fontsize=11)
+
+    plt.tight_layout()
+    filename = "Figure_5_5_Tradeoff_Decoupling.png"
+    plt.savefig(filename, format='png', bbox_inches='tight')
+    print(f"Plot extraction successful. Saved as: {filename}")
+    plt.close()
+
+
 if __name__ == "__main__":
     try:
+        # 1. Execute standard .npz-dependent visualisations
         sim_data = load_simulation_data(SCENARIOS)
         plot_grouped_box_whisker(sim_data, SCENARIOS, SCENARIO_LABELS)
         plot_temporal_losses(sim_data, SCENARIOS, SCENARIO_LABELS)
         plot_spatial_tap_operations(sim_data, SCENARIOS, SCENARIO_LABELS)
         plot_temporal_taps(sim_data, SCENARIOS, SCENARIO_LABELS)
+
+        # 2. Execute independent scalar decoupling visualisation
+        plot_tradeoff_decoupling()
+
     except Exception as e:
         print(f"Execution Fault: {e}")
